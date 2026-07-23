@@ -1,0 +1,128 @@
+--- Entidade carro:
+
+- UUID id,
+- String marca,
+- String modelo,
+- Integer ano,
+- BigDecimal preco
+- String cor
+- Integer quilometragem
+- Combustivel combustivel
+- Cambio cambio
+- Boolean disponivel
+- LocalDate dataCadastro
+
+--- Entidade cliente:
+- UUID id
+- String nome
+- String cpf
+- String email
+- String telefone
+- String seha
+
+--- Entidade role:
+- UUID id
+- String nome
+
+--- Entidade venda:
+- UUID id
+- LocalDateTime dataVenda
+- BigDecimal valorVenda
+
+@ManyToOne
+Carro carro
+
+@ManyToOne
+Cliente cliente
+
+ENUMS
+--- Combustivel
+    FLEX,
+    GASOLINA,
+    ETANOL,
+    DIESEL,
+    ELETRICO,
+    HIBRIDO
+
+--- Cambio
+    MANUAL,
+    AUTOMATICO,
+    CVT
+
+// Depois inserir many to many para categoria e fornecedor
+--- Categoria
+- UUID id
+- String nome
+
+--- Fornecedor
+- UUID id
+- String nome
+- String telefone
+- String email
+- Boolean ativo
+
+--- // --- // --- // ---
+
+--- FUNCIONALIDADES:
+Cadastrar carro
+Atualizar carro
+Buscar por ID
+Listar todos
+Excluir (soft delete)
+
+Pesquisa:
+GET /carros?marca=Toyota
+GET /carros?modelo=Civic
+GET /carros?ano=2022
+GET /carros?precoMin=50000
+GET /carros?precoMax=120000
+GET /carros?categoria=SUV
+
+--- VEnda
+POST /vendas
+
+RequestDTO:
+{
+   "clienteId": "...",
+   "carroId": "..."
+}
+
+Regras de negócio:
+1. carro precisa existir
+2. cliente precisa existir
+3. carro precisa estar disponível
+
+--- Upload de fotos
+POST MultipartFile
+
+Cada carro pode ter várias fotos.
+
+Carro - Foto
+- UUID id
+- String url
+
+--- Autenticação 
+- UUID id
+- String nome
+- String email
+- String senha
+- Role
+
+Roles: VENDEDOR, CLIENTE("role")
+
+Dashboards-endpoints:
+GET /dashboard/carros-disponiveis
+GET /dashboard/valor-total-estoque
+GET /dashboard/quantidade-vendas
+GET /dashboard/carros-mais-caros
+GET /dashboard/fornecedor-com-mais-carros
+
+--- Validações
+- Não permitir: 
+preço negativo
+ano menor que 1900
+quilometragem negativa
+fornecedor inativo
+vender carro indisponível
+cadastrar carro com marca vazia
+cadastrar categoria duplicada
